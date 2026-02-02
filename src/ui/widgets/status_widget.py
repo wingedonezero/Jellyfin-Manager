@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QFont
 
-from ...core.docker_manager import DockerStatus, DaemonState, ContainerState
+from core.docker_manager import DockerStatus, DaemonState, ContainerState
 
 
 def get_local_ip() -> str:

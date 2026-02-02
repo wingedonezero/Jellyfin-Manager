@@ -10,9 +10,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Signal, Slot
 from pathlib import Path
 
-from ...core.docker_manager import DockerManager, ContainerState, DaemonState
-from ...core.config import ConfigManager
-from ...core.log_streamer import ImagePullWorker
+from core.docker_manager import DockerManager, ContainerState, DaemonState
+from core.config import ConfigManager
+from core.log_streamer import ImagePullWorker
 
 
 class ControlPanel(QWidget):
