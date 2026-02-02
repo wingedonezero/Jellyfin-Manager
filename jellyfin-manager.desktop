@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Jellyfin Manager
+Comment=Manage Jellyfin Docker container
+Exec=/home/user/Jellyfin-Manager/launch.sh
+Icon=jellyfin
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;Multimedia;
+Keywords=jellyfin;docker;media;server;
