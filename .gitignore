@@ -67,3 +67,6 @@ venv.bak/
 
 # App-specific - local config and Jellyfin data
 .config/
+
+# Standalone Python installation (from setup_env.sh)
+.python/

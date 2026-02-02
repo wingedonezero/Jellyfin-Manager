@@ -6,9 +6,34 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_SCRIPT="$SCRIPT_DIR/jellyfin_manager.py"
+VENV_DIR="$SCRIPT_DIR/.venv"
 
-# Command to run inside terminal
-RUN_CMD="cd \"$SCRIPT_DIR\" && python3 \"$APP_SCRIPT\"; echo ''; echo '─────────────────────────────────────'; echo 'Jellyfin Manager closed.'; echo 'Press Enter to close this window...'; read"
+# Build the command to run inside terminal
+# Activates venv if it exists, otherwise prompts to run setup
+RUN_CMD="cd \"$SCRIPT_DIR\"
+
+# Check if venv exists
+if [ -d \"$VENV_DIR\" ]; then
+    echo 'Activating virtual environment...'
+    source \"$VENV_DIR/bin/activate\"
+    python \"$APP_SCRIPT\"
+else
+    echo ''
+    echo '══════════════════════════════════════════════'
+    echo '  Virtual environment not found!'
+    echo '══════════════════════════════════════════════'
+    echo ''
+    echo 'Please run setup first:'
+    echo '  ./setup_env.sh'
+    echo ''
+    echo 'Then try launching again.'
+fi
+
+echo ''
+echo '─────────────────────────────────────'
+echo 'Jellyfin Manager closed.'
+echo 'Press Enter to close this window...'
+read"
 
 # Try to find an available terminal emulator
 if command -v konsole &> /dev/null; then
