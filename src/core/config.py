@@ -3,12 +3,26 @@ Application configuration management.
 
 Handles persistent storage of user settings including media paths,
 Docker preferences, and container configuration.
+
+All config files are stored in the app's .config/ directory to keep
+everything self-contained and easy to find.
 """
 
 import json
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Optional
+
+
+def get_app_directory() -> Path:
+    """Get the application's root directory."""
+    # This file is at src/core/config.py, so go up 3 levels
+    return Path(__file__).parent.parent.parent.resolve()
+
+
+def get_config_directory() -> Path:
+    """Get the .config directory inside the app folder."""
+    return get_app_directory() / ".config"
 
 
 @dataclass
@@ -26,9 +40,9 @@ class ContainerConfig:
 @dataclass
 class AppConfig:
     """Main application configuration."""
-    # Local paths for Jellyfin data
-    config_dir: Path = field(default_factory=lambda: Path.home() / ".jellyfin-manager" / "config")
-    cache_dir: Path = field(default_factory=lambda: Path.home() / ".jellyfin-manager" / "cache")
+    # Local paths for Jellyfin data (stored in app's .config/jellyfin/)
+    config_dir: Path = field(default_factory=lambda: get_config_directory() / "jellyfin" / "config")
+    cache_dir: Path = field(default_factory=lambda: get_config_directory() / "jellyfin" / "cache")
 
     # User-selected media folders (will be mounted into container)
     media_paths: list[Path] = field(default_factory=list)
@@ -57,10 +71,8 @@ class AppConfig:
 class ConfigManager:
     """Manages loading and saving application configuration."""
 
-    DEFAULT_CONFIG_PATH = Path.home() / ".jellyfin-manager" / "app_config.json"
-
     def __init__(self, config_path: Optional[Path] = None):
-        self.config_path = config_path or self.DEFAULT_CONFIG_PATH
+        self.config_path = config_path or (get_config_directory() / "app_config.json")
         self._config: Optional[AppConfig] = None
 
     @property
