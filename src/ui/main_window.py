@@ -98,53 +98,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addWidget(splitter, stretch=1)
 
-        # Apply basic styling
-        self.setStyleSheet("""
-            QMainWindow {
-                background-color: #f5f5f5;
-            }
-            QFrame {
-                background-color: white;
-                border-radius: 8px;
-            }
-            QPushButton {
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                padding: 8px 16px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #2563eb;
-            }
-            QPushButton:pressed {
-                background-color: #1d4ed8;
-            }
-            QPushButton:disabled {
-                background-color: #9ca3af;
-            }
-            QGroupBox {
-                font-weight: bold;
-                border: 1px solid #e5e7eb;
-                border-radius: 4px;
-                margin-top: 10px;
-                padding-top: 10px;
-            }
-            QGroupBox::title {
-                subcontrol-origin: margin;
-                left: 10px;
-                padding: 0 5px;
-            }
-            QCheckBox {
-                spacing: 8px;
-            }
-            QListWidget {
-                border: 1px solid #e5e7eb;
-                border-radius: 4px;
-            }
-        """)
-
     def _connect_signals(self):
         """Connect signals between components."""
         # Control panel signals
