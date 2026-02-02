@@ -11,13 +11,13 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Slot, QTimer
 from PySide6.QtGui import QCloseEvent
 
-from .widgets.control_panel import ControlPanel
-from .widgets.status_widget import StatusWidget
-from .widgets.log_viewer import LogViewer
+from ui.widgets.control_panel import ControlPanel
+from ui.widgets.status_widget import StatusWidget
+from ui.widgets.log_viewer import LogViewer
 
-from ..core.docker_manager import DockerManager, ContainerState, DaemonState
-from ..core.config import ConfigManager
-from ..core.log_streamer import LogStreamer, StatusPoller
+from core.docker_manager import DockerManager, ContainerState, DaemonState
+from core.config import ConfigManager
+from core.log_streamer import LogStreamer, StatusPoller
 
 
 class MainWindow(QMainWindow):

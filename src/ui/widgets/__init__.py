@@ -1,8 +1,8 @@
 """UI Widgets."""
 
-from .control_panel import ControlPanel
-from .status_widget import StatusWidget, StatusIndicator
-from .log_viewer import LogViewer
+from ui.widgets.control_panel import ControlPanel
+from ui.widgets.status_widget import StatusWidget, StatusIndicator
+from ui.widgets.log_viewer import LogViewer
 
 __all__ = [
     "ControlPanel",
