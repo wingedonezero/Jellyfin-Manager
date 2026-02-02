@@ -2,13 +2,28 @@
 Status display widget showing Docker and container state.
 """
 
+import socket
+
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QGroupBox
 )
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QFont
 
 from ...core.docker_manager import DockerStatus, DaemonState, ContainerState
+
+
+def get_local_ip() -> str:
+    """Get the local network IP address."""
+    try:
+        # Create a socket to determine the local IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "unknown"
 
 
 class StatusIndicator(QFrame):
@@ -124,6 +139,34 @@ class StatusWidget(QWidget):
 
         layout.addLayout(self.url_row)
 
+        # Network access info (for TV/Kodi/other devices)
+        self.network_group = QGroupBox("Connect from Other Devices")
+        network_layout = QVBoxLayout(self.network_group)
+        network_layout.setSpacing(4)
+
+        # LAN URL
+        lan_row = QHBoxLayout()
+        lan_label = QLabel("TV / Kodi / Phone:")
+        lan_row.addWidget(lan_label)
+        self.lan_url = QLabel("")
+        self.lan_url.setStyleSheet("color: #3b82f6; font-weight: bold;")
+        self.lan_url.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        lan_row.addWidget(self.lan_url)
+        lan_row.addStretch()
+        network_layout.addLayout(lan_row)
+
+        # Help text
+        self.network_help = QLabel(
+            "Use this address in Jellyfin apps on your TV, Kodi, phone, etc.\n"
+            "Make sure your device is on the same network."
+        )
+        self.network_help.setStyleSheet("color: #6b7280; font-size: 11px;")
+        self.network_help.setWordWrap(True)
+        network_layout.addWidget(self.network_help)
+
+        self.network_group.setVisible(False)  # Hidden until running
+        layout.addWidget(self.network_group)
+
         # Image status
         image_row = QHBoxLayout()
         image_label = QLabel("Image:")
@@ -193,10 +236,21 @@ class StatusWidget(QWidget):
             self.image_status.setText("Not pulled")
             self.image_status.setStyleSheet("color: #6b7280;")
 
-    def set_web_url(self, url: str):
-        """Set the web UI URL display."""
+    def set_web_url(self, url: str, port: int = 8096):
+        """Set the web UI URL display and show network info."""
         self.url_value.setText(url)
 
+        # Show LAN IP for other devices
+        local_ip = get_local_ip()
+        if local_ip != "unknown":
+            lan_url = f"http://{local_ip}:{port}"
+            self.lan_url.setText(lan_url)
+            self.network_group.setVisible(True)
+        else:
+            self.network_group.setVisible(False)
+
     def clear_web_url(self):
-        """Clear the web UI URL display."""
+        """Clear the web UI URL display and hide network info."""
         self.url_value.setText("")
+        self.lan_url.setText("")
+        self.network_group.setVisible(False)
